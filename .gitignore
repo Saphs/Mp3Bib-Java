@@ -1,2 +1,5 @@
 out/
 .idea/
+.gradle/
+Mp3Bib.iml
+build/
