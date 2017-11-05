@@ -28,6 +28,7 @@ public class CustomLogger implements Logger {
     private static int currentLogDestination = LOGDESTINATION_CONSOLE;
 
     public static void setLogLevel(int logLevel) {
+        info("setting Logging Level to " + logLevel);
         currentLogLevel = logLevel;
     }
 
@@ -43,6 +44,7 @@ public class CustomLogger implements Logger {
      * @category Setter
      */
     static void setLogDestination(int dest) {
+        info("setting Logging Destination to " + dest);
         currentLogDestination = dest;
     }
 
@@ -132,6 +134,7 @@ public class CustomLogger implements Logger {
                 System.out.println(out);
                 break;
             case LOGDESTINATION_FILE:
+                //TODO: Implement logging to File
                 break;
         }
     }
