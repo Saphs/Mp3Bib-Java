@@ -27,12 +27,26 @@ public class CustomLogger implements Logger {
     private static int currentLogLevel = LOGLEVEL_INFO;
     private static int currentLogDestination = LOGDESTINATION_CONSOLE;
 
-    public static void setLogLevel(int logLevel) {
+
+    public CustomLogger(int logLevel, int logDestination) {
+        super();
+        setLogDestination(logDestination);
+        setLogLevel(logLevel);
+    }
+    public CustomLogger(int logLevel) {
+        super();
+        setLogLevel(logLevel);
+    }
+    public CustomLogger() {
+        super();
+    }
+
+    public void setLogLevel(int logLevel) {
         info("setting Logging Level to " + logLevel);
         currentLogLevel = logLevel;
     }
 
-    static int getLogLevel() {
+    public int getLogLevel() {
         return currentLogLevel;
     }
 
@@ -43,7 +57,7 @@ public class CustomLogger implements Logger {
      * @see com.mp3bib.logging.CustomLogger#LOGDESTINATION_FILE
      * @category Setter
      */
-    static void setLogDestination(int dest) {
+    public void setLogDestination(int dest) {
         info("setting Logging Destination to " + dest);
         currentLogDestination = dest;
     }
@@ -55,7 +69,7 @@ public class CustomLogger implements Logger {
      * @see com.mp3bib.logging.CustomLogger#LOGDESTINATION_FILE
      * @category Getter
      */
-    static int getLogDestination() {
+    public int getLogDestination() {
         return currentLogDestination;
     }
 
@@ -67,7 +81,7 @@ public class CustomLogger implements Logger {
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_TRACE
      */
-    static void trace(String customText) {
+    public void trace(String customText) {
         if (currentLogLevel >= LOGLEVEL_TRACE) {
             log(customText);
         }
@@ -77,7 +91,7 @@ public class CustomLogger implements Logger {
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_DEBUG
      */
-    static void debug(String customText) {
+    public void debug(String customText) {
         if (currentLogLevel >= LOGLEVEL_DEBUG) {
             log(customText);
         }
@@ -87,7 +101,7 @@ public class CustomLogger implements Logger {
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_INFO
      */
-    static void info(String customText) {
+    public void info(String customText) {
         if (currentLogLevel >= LOGLEVEL_INFO) {
             log(customText);
         }
@@ -97,7 +111,7 @@ public class CustomLogger implements Logger {
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_WARN
      */
-    static void warn(String customText) {
+    public void warn(String customText) {
         if (currentLogLevel >= LOGLEVEL_WARN) {
             log(customText);
         }
@@ -107,7 +121,7 @@ public class CustomLogger implements Logger {
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_ERROR
      */
-    static void error(String customText) {
+    public void error(String customText) {
         if (currentLogLevel >= LOGLEVEL_ERROR) {
             log(customText);
         }
@@ -117,7 +131,7 @@ public class CustomLogger implements Logger {
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_FATAL
      */
-    static void fatal(String customText) {
+    public void fatal(String customText) {
         if (currentLogLevel >= LOGLEVEL_FATAL) {
             log(customText);
         }
@@ -126,7 +140,7 @@ public class CustomLogger implements Logger {
 
 
     //function to log nevertheless which loglevel is used
-    private static void log(String customText) {
+    private void log(String customText) {
         Date date = new Date();
         String out = String.format("%tF %tT:%tQ \t%s \t%s", date, getCallerInfo(), customText);
         switch (currentLogDestination) {
@@ -140,7 +154,7 @@ public class CustomLogger implements Logger {
     }
 
     //function to get Information of the calling function
-    private static String getCallerInfo() {
+    private String getCallerInfo() {
         StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
         for (int i=1; i<stElements.length; i++) {
             StackTraceElement caller = stElements[i];

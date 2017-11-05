@@ -48,7 +48,7 @@ public interface Logger {
      * @see com.mp3bib.logging.Logger#LOGLEVEL_FATAL
      * @category Setter
      */
-    static void setLogLevel(int logLevel) {}
+    void setLogLevel(int logLevel);
 
     /**
      * get the LogLevel
@@ -61,44 +61,42 @@ public interface Logger {
      * @see com.mp3bib.logging.Logger#LOGLEVEL_FATAL
      * @category Getter
      */
-    static int getLogLevel() {
-        return -1;
-    }
+    int getLogLevel();
 
     /**
      * Logs the text with trace logLevel
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_TRACE
      */
-    static void trace(String customText) {}
+    void trace(String customText);
     /**
      * Logs the text with trace logLevel
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_DEBUG
      */
-    static void debug(String customText) {}
+    void debug(String customText);
     /**
      * Logs the text with trace logLevel
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_INFO
      */
-    static void info(String customText) {}
+    void info(String customText);
     /**
      * Logs the text with trace logLevel
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_WARN
      */
-    static void warn(String customText) {}
+    void warn(String customText);
     /**
      * Logs the text with trace logLevel
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_ERROR
      */
-    static void error(String customText) {}
+    void error(String customText);
     /**
      * Logs the text with trace logLevel
      * @param customText the text
      * @see com.mp3bib.logging.Logger#LOGLEVEL_FATAL
      */
-    static void fatal(String customText) {}
+    void fatal(String customText);
 }

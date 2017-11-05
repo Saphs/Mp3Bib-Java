@@ -1,5 +1,7 @@
 
 
+import com.mp3bib.logging.CustomLogger;
+import com.mp3bib.logging.Logger;
 import java.util.ArrayList;
 
 
@@ -7,6 +9,8 @@ import java.util.ArrayList;
  * This class is implemented as an singelton, use the getInstance() instead of a normal constructor call.
  */
 public class BackendprocessService implements Runnable, BindableBackend{
+
+    public Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
 
     private ArrayList<String> requestBuffer = new ArrayList<>();
     private CommandExecuter commandExecuter = new CommandExecuter();
@@ -17,7 +21,7 @@ public class BackendprocessService implements Runnable, BindableBackend{
     private static final BackendprocessService instance = new BackendprocessService();
 
     private BackendprocessService() {
-        System.out.println("New Object of " + getClass().getName() + "instantiated.");
+        logger.debug("New Object of " + getClass().getName() + "instantiated.");
     }
 
     public static BackendprocessService getInstance() {
@@ -26,7 +30,7 @@ public class BackendprocessService implements Runnable, BindableBackend{
 
     @Override
     public void run() {
-        System.out.println("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
+        logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
 
         synchronized (this) {
 
@@ -42,7 +46,7 @@ public class BackendprocessService implements Runnable, BindableBackend{
             }
         }
 
-        System.out.println("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
+        logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
     }
 
     private void executeRequestedCommand(){
@@ -54,7 +58,7 @@ public class BackendprocessService implements Runnable, BindableBackend{
                 if (currentRequest.startsWith("$")) response = callSystemCommand(currentRequest);
                 else response = callCommand(currentRequest);
             }catch(Exception e){
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             }
             responseDistributer.answerAny(response);
         }
@@ -101,7 +105,7 @@ public class BackendprocessService implements Runnable, BindableBackend{
     public void unbind(BindableFrontend frontend){
         responseDistributer.unbindFrontend(frontend);
         if (responseDistributer.numberOfBoundFrontends() <= 0){
-            System.out.println("Backend left without binding - exiting");
+            logger.info("Backend left without binding - exiting");
             pushRequest("$Kill");
         }
     }
