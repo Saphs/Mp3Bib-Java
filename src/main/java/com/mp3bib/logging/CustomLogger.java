@@ -1,5 +1,6 @@
 package com.mp3bib.logging;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -142,7 +143,10 @@ public class CustomLogger implements Logger {
     //function to log nevertheless which loglevel is used
     private void log(String customText) {
         Date date = new Date();
-        String out = String.format("%tF %tT:%tQ \t%s \t%s", date, getCallerInfo(), customText);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+
+        String dateString = formatter.format(date);
+        String out = String.format("%s %s        %s", dateString, getCallerInfo(), customText);
         switch (currentLogDestination) {
             case LOGDESTINATION_CONSOLE:
                 System.out.println(out);
@@ -159,7 +163,7 @@ public class CustomLogger implements Logger {
         for (int i=1; i<stElements.length; i++) {
             StackTraceElement caller = stElements[i];
             if (!caller.getClassName().equals(CustomLogger.class.getName()) && caller.getClassName().indexOf("java.lang.Thread")!=0) {
-                return String.format("in %s, %s : line %d",caller.getMethodName(), caller.getClassName(), caller.getLineNumber());
+                return String.format("%40s %40s : line %3d", caller.getClassName(),caller.getMethodName(), caller.getLineNumber());
             }
         }
         return null;
