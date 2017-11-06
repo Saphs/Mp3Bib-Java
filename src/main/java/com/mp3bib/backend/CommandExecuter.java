@@ -1,12 +1,18 @@
 package com.mp3bib.backend;
 
+import java.util.Arrays;
+
 /**
  * By Tizian Rettig
  */
 
 public class CommandExecuter {
 
-    public String setPath(){
+    public String help() {
+        return "List of all available commands: " + Arrays.toString(CommandValidator.getValidationList());
+    }
+
+    public String setPath(String path){
         return "setPath method called";
         //TODO: implement a way to set internal path variable
     }

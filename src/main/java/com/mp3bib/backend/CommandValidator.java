@@ -5,18 +5,25 @@ package com.mp3bib.backend;
  */
 public class CommandValidator {
 
-    private static String[] validationList = {
-            "command1",
-            "command2",
+    private final static String[] validationList = {
+            "help",
+
+            "musicList",
+            "setPath",
+            "edit",
 
             "$Kill"
     };
 
-    public static Boolean validateCommand(String command){
+    public static Boolean validate(String command){
         Boolean isValid = false;
         for ( String validationString: validationList ) {
             if (validationString.equals(command)) isValid = true;
         }
         return isValid;
+    }
+
+    public static String[] getValidationList() {
+        return validationList;
     }
 }
