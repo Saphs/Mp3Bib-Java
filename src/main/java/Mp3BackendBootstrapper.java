@@ -1,4 +1,5 @@
-
+import com.mp3bib.logging.CustomLogger;
+import com.mp3bib.logging.Logger;
 
 /**
  * By Tizian Rettig
@@ -6,16 +7,18 @@
 
 public class Mp3BackendBootstrapper {
 
+    public static Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
+
     public static void main (String[] args) {
-        System.out.println("Bootstrap:\t" + Mp3BackendBootstrapper.class.getSimpleName() + " on " + Thread.currentThread().getName() + " starts.");
+        logger.debug("Bootstrap:\t" + Mp3BackendBootstrapper.class.getSimpleName() + " on " + Thread.currentThread().getName() + " starts.");
         init(true); //temporary solution for entering Console-mode
-        System.out.println("Bootstrap:\t" + Mp3BackendBootstrapper.class.getSimpleName() + " on " + Thread.currentThread().getName() + " finished.");
+        logger.debug("Bootstrap:\t" + Mp3BackendBootstrapper.class.getSimpleName() + " on " + Thread.currentThread().getName() + " finished.");
     }
 
     private static void init(Boolean consoleMode){ //sout.println will be replaced when a logging framework is introduced
-        System.out.println("Console mode: " + consoleMode);
+        logger.info("Console mode: " + consoleMode);
         if(consoleMode){
-            System.out.println("Starting in Console mode...");
+            logger.info("Starting in Console mode...");
             ConsoleFrontend defaultFrontend = new ConsoleFrontend();
             BackendprocessService backend = BackendprocessService.getInstance();
 

@@ -1,5 +1,7 @@
 
 
+import com.mp3bib.logging.CustomLogger;
+import com.mp3bib.logging.Logger;
 import java.util.ArrayList;
 
 
@@ -7,6 +9,8 @@ import java.util.ArrayList;
  * This class is implemented as an singelton, use the getInstance() instead of a normal constructor call.
  */
 public class BackendprocessService extends BindableBackend implements Runnable{
+
+    public Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
 
     private ArrayList<String> requestBuffer = new ArrayList<>();
     private CommandExecuter commandExecuter = new CommandExecuter();
@@ -18,7 +22,7 @@ public class BackendprocessService extends BindableBackend implements Runnable{
     private static final BackendprocessService instance = new BackendprocessService();
 
     private BackendprocessService() {
-        System.out.println("New Object of " + getClass().getName() + "instantiated.");
+        logger.debug("New Object of " + getClass().getName() + "instantiated.");
     }
 
     public static BackendprocessService getInstance() {
@@ -30,14 +34,17 @@ public class BackendprocessService extends BindableBackend implements Runnable{
     // Implementation ----------------------------------------------------------------------------------------------------
     @Override
     public void run() {
-        System.out.println("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
+      
+        logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
+
         synchronized (this) {
             while (!closeRequest) {
                 waitForRequest();
                 if (!closeRequest) { executeRequestedCommand(); }
             }
         }
-        System.out.println("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
+
+        logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
     }
 
     @Override
@@ -67,7 +74,7 @@ public class BackendprocessService extends BindableBackend implements Runnable{
                 if (currentRequest.startsWith("$")) response = callSystemCommand(currentRequest);
                 else response = callCommand(currentRequest);
             }catch(Exception e){
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
             }
         }
         else response = "Invalid Command.";

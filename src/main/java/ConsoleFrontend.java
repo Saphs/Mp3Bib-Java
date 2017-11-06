@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import com.mp3bib.logging.Logger;
+import com.mp3bib.logging.CustomLogger;
 
 public class ConsoleFrontend extends BindableFrontend implements Runnable{
 
@@ -7,7 +9,7 @@ public class ConsoleFrontend extends BindableFrontend implements Runnable{
     // Implementation --------------------------------------------------------------------------------------------------
     @Override
     public void run() {
-        System.out.println("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
+        logger.info("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
 
         Scanner keyboardInput = new Scanner(System.in);
         Boolean closeRequest = false;
@@ -26,7 +28,7 @@ public class ConsoleFrontend extends BindableFrontend implements Runnable{
         }
         RequestExit();
 
-        System.out.println("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
+        logger.info("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
     }
 
     @Override
@@ -63,7 +65,7 @@ public class ConsoleFrontend extends BindableFrontend implements Runnable{
     }
 
     private void RequestExit(){
-        System.out.println("Unbinding frontend");
+        logger.info("Unbinding frontend");
         for (int i = 0; i < bindables.size(); i++) {
             unbind(bindables.get(i));
         }
