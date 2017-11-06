@@ -2,24 +2,18 @@ import java.util.ArrayList;
 
 public class ResponseDistributer {
 
-    private ArrayList<BindableFrontend> boundFrontends = new ArrayList<>();
+    private ArrayList<Bindable> boundElements;
+
+    ResponseDistributer(ArrayList<Bindable> newBoundElements){
+        this.boundElements = newBoundElements;
+    }
 
     public void answerAny(String response){
-        for (BindableFrontend frontend : boundFrontends) {
-            frontend.pushAnswer(response);
+        for (Bindable element : boundElements) {
+            if (element instanceof BindableFrontend){
+                ((BindableFrontend) element).pushAnswer(response);
+            }
         }
-    }
-
-    public void bindFrontend (BindableFrontend frontend){
-        boundFrontends.add(frontend);
-    }
-
-    public void unbindFrontend (BindableFrontend frontend){
-        boundFrontends.remove(frontend);
-    }
-
-    public int numberOfBoundFrontends(){
-        return boundFrontends.size();
     }
 
 }
