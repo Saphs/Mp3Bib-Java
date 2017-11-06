@@ -8,16 +8,17 @@ import java.util.ArrayList;
 /**
  * This class is implemented as an singelton, use the getInstance() instead of a normal constructor call.
  */
-public class BackendprocessService implements Runnable, BindableBackend{
+public class BackendprocessService extends BindableBackend implements Runnable{
 
     public Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
 
     private ArrayList<String> requestBuffer = new ArrayList<>();
     private CommandExecuter commandExecuter = new CommandExecuter();
-    private ResponseDistributer responseDistributer = new ResponseDistributer();
+    private ResponseDistributer responseDistributer = new ResponseDistributer(super.bindables);
 
     private Boolean closeRequest = false;
 
+    // Singelton implementation ----------------------------------------------------------------------------------------
     private static final BackendprocessService instance = new BackendprocessService();
 
     private BackendprocessService() {
@@ -27,21 +28,18 @@ public class BackendprocessService implements Runnable, BindableBackend{
     public static BackendprocessService getInstance() {
         return instance;
     }
+    //------------------------------------------------------------------------------------------------------------------
 
+
+    // Implementation ----------------------------------------------------------------------------------------------------
     @Override
     public void run() {
+      
         logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
 
         synchronized (this) {
-
             while (!closeRequest) {
-                while (requestBuffer.isEmpty()) {
-                    try {
-                        this.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                waitForRequest();
                 if (!closeRequest) { executeRequestedCommand(); }
             }
         }
@@ -49,29 +47,57 @@ public class BackendprocessService implements Runnable, BindableBackend{
         logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
     }
 
+    @Override
+    public synchronized void pushRequest(String request) {
+        requestBuffer.add(request);
+        notify();
+    }
+
+    @Override
+    Boolean needsToClose() {
+        return super.bindables.isEmpty();
+    }
+
+    @Override
+    void killBackend() {
+        pushRequest("$Kill");
+    }
+    //------------------------------------------------------------------------------------------------------------------
+
+    // Helper methods --------------------------------------------------------------------------------------------------
     private void executeRequestedCommand(){
         String currentRequest = requestBuffer.get(0);
-        if (CommandValidator.validateCommand(currentRequest)){
+        String response = "";
 
-            String response = "Empty Response";
+        if (CommandValidator.validateCommand(currentRequest)){
             try{
                 if (currentRequest.startsWith("$")) response = callSystemCommand(currentRequest);
                 else response = callCommand(currentRequest);
             }catch(Exception e){
                 logger.error(e.getMessage());
             }
-            responseDistributer.answerAny(response);
         }
+        else response = "Invalid Command.";
+
+        responseDistributer.answerAny(response);
         requestBuffer.remove(0);
     }
 
+    private void waitForRequest(){
+        while (requestBuffer.isEmpty()) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //------------------------------------------------------------------------------------------------------------------
+
+    // Command calls ---------------------------------------------------------------------------------------------------
     private String callSystemCommand(String systemCommand) {
         String commandResult;
         switch ( systemCommand ) {
-            case "$NoBF":
-                commandResult = String.valueOf(responseDistributer.numberOfBoundFrontends());
-                break;
-
             case "$Kill":
                 this.closeRequest = true;
                 commandResult = "shutdown requested";
@@ -90,25 +116,5 @@ public class BackendprocessService implements Runnable, BindableBackend{
             default: throw new IllegalArgumentException("Command " + command + " was not found in " + getClass().getName());
         }
     }
-
-
-    @Override
-    public synchronized void pushRequest(String request) {
-        requestBuffer.add(request);
-        notify();
-    }
-
-    public void bind(BindableFrontend frontend){
-        responseDistributer.bindFrontend(frontend);
-    }
-
-    public void unbind(BindableFrontend frontend){
-        responseDistributer.unbindFrontend(frontend);
-        if (responseDistributer.numberOfBoundFrontends() <= 0){
-            logger.info("Backend left without binding - exiting");
-            pushRequest("$Kill");
-        }
-    }
-
-
+    //------------------------------------------------------------------------------------------------------------------
 }

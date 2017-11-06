@@ -7,7 +7,6 @@ public class CommandValidator {
             "command1",
             "command2",
 
-            "$NoBF",
             "$Kill"
     };
 

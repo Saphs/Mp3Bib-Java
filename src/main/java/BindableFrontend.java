@@ -1,4 +1,3 @@
-public interface BindableFrontend {
-    void pushAnswer(String response);
-
+public abstract class BindableFrontend extends Bindable{
+    abstract void pushAnswer(String response);
 }

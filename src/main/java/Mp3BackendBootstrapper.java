@@ -23,7 +23,6 @@ public class Mp3BackendBootstrapper {
             BackendprocessService backend = BackendprocessService.getInstance();
 
             backend.bind(defaultFrontend);
-            defaultFrontend.bind(backend);
 
             Thread consoleThread = new Thread(defaultFrontend);
             Thread backendThread = new Thread(backend);
