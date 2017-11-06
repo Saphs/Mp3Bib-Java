@@ -1,7 +1,9 @@
+package com.mp3bib.communication;
+
 public abstract class BindableBackend extends Bindable {
-    abstract void pushRequest(String request);
-    abstract Boolean needsToClose();
-    abstract void killBackend();
+    public abstract void pushRequest(String request);
+    public abstract Boolean needsToClose();
+    public abstract void killBackend();
 
     @Override
     public void unbind(Bindable counterpart) {

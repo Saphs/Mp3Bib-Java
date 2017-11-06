@@ -1,4 +1,10 @@
+package com.mp3bib.frontend;
+
 import java.util.Scanner;
+
+import com.mp3bib.communication.BindableBackend;
+import com.mp3bib.communication.Bindable;
+import com.mp3bib.communication.BindableFrontend;
 import com.mp3bib.logging.Logger;
 import com.mp3bib.logging.CustomLogger;
 

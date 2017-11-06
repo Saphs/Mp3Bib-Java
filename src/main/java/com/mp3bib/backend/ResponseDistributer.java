@@ -1,3 +1,8 @@
+package com.mp3bib.backend;
+
+import com.mp3bib.communication.Bindable;
+import com.mp3bib.communication.BindableFrontend;
+
 import java.util.ArrayList;
 
 public class ResponseDistributer {
