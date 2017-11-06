@@ -4,6 +4,7 @@ import com.mp3bib.logging.CustomLogger;
 
 public class ConsoleFrontend extends BindableFrontend implements Runnable{
 
+    public static Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
     private String responseBuffer = "";
 
     // Implementation --------------------------------------------------------------------------------------------------
