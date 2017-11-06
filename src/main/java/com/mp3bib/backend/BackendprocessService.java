@@ -70,7 +70,9 @@ public class BackendprocessService extends BindableBackend implements Runnable{
         String currentRequest = requestBuffer.get(0);
         String response = "";
 
-        if (CommandValidator.validateCommand(currentRequest)){
+        if (CommandValidator.validate(currentRequest)){
+
+
             try{
                 if (currentRequest.startsWith("$")) response = callSystemCommand(currentRequest);
                 else response = callCommand(currentRequest);
@@ -112,10 +114,24 @@ public class BackendprocessService extends BindableBackend implements Runnable{
     }
 
     private String callCommand(String command){
+        String commandResult;
         switch( command ){
-            case "command1": return commandExecuter.getMusicList();
-            default: throw new IllegalArgumentException("Command " + command + " was not found in " + getClass().getName());
+            case "musicList":
+                commandResult =  commandExecuter.getMusicList();
+                break;
+            case "setPath":
+                commandResult =  commandExecuter.setPath("dummy_path");
+                break;
+            case "edit":
+                commandResult =  commandExecuter.edit("dummy_file");
+                break;
+            case "help":
+                commandResult = commandExecuter.help();
+                break;
+            default:
+                throw new IllegalArgumentException("Command " + command + " was not found in " + getClass().getName());
         }
+        return commandResult;
     }
     //------------------------------------------------------------------------------------------------------------------
 }
