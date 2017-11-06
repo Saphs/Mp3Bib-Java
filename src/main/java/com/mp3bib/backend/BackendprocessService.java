@@ -1,5 +1,6 @@
+package com.mp3bib.backend;
 
-
+import com.mp3bib.communication.BindableBackend;
 import com.mp3bib.logging.CustomLogger;
 import com.mp3bib.logging.Logger;
 import java.util.ArrayList;
@@ -54,12 +55,12 @@ public class BackendprocessService extends BindableBackend implements Runnable{
     }
 
     @Override
-    Boolean needsToClose() {
+    public Boolean needsToClose() {
         return super.bindables.isEmpty();
     }
 
     @Override
-    void killBackend() {
+    public void killBackend() {
         pushRequest("$Kill");
     }
     //------------------------------------------------------------------------------------------------------------------

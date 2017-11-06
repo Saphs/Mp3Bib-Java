@@ -1,3 +1,5 @@
+package com.mp3bib.communication;
+
 import java.util.ArrayList;
 
 public abstract class  Bindable {

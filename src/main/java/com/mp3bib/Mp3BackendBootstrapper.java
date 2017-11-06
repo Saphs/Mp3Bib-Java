@@ -1,3 +1,7 @@
+package com.mp3bib;
+
+import com.mp3bib.backend.BackendprocessService;
+import com.mp3bib.frontend.ConsoleFrontend;
 import com.mp3bib.logging.CustomLogger;
 import com.mp3bib.logging.Logger;
 
