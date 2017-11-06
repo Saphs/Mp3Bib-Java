@@ -1,7 +1,11 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import com.mp3bib.logging.Logger;
+import com.mp3bib.logging.CustomLogger;
 
 public class ConsoleFrontend implements Runnable, BindableFrontend{
+
+    public Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
 
     private ArrayList<BindableBackend> boundBackends = new ArrayList<BindableBackend>();
     private Boolean answerPushed = false;
@@ -48,7 +52,7 @@ public class ConsoleFrontend implements Runnable, BindableFrontend{
 
     @Override
     public void run() {
-        System.out.println("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
+        logger.info("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
 
         Boolean closeRequest = false;
         while(!closeRequest){
@@ -62,11 +66,11 @@ public class ConsoleFrontend implements Runnable, BindableFrontend{
         }
         RequestExit();
 
-        System.out.println("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
+        logger.info("Frontend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " finished.");
     }
 
     private void RequestExit(){
-        System.out.println("Unbinding frontend");
+        logger.info("Unbinding frontend");
         for (BindableBackend backend :boundBackends) {
             backend.unbind(this);
         }
