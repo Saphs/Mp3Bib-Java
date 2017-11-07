@@ -1,3 +1,7 @@
 apply plugin: 'idea'
 //and standard one
 apply plugin: 'java'
+
+dependencies {
+    compile files('libs/beaglebuddy_mp3.jar')
+}
