@@ -36,7 +36,7 @@ public class Mp3IO {
     public static MP3 getMP3Tags(File file) {
         try {
             MP3 mp3 = new MP3(file);
-            getMP3Tags(mp3);
+            return getMP3Tags(mp3);
         } catch (IOException ex) {
             BackendprocessService.getInstance().logger.error("An error occurred while reading/saving the mp3 file.");
             return null;
@@ -45,7 +45,7 @@ public class Mp3IO {
     public static MP3 getMP3Tags(String dir) {
         try {
             MP3 mp3 = new MP3(dir);
-            getMP3Tags(mp3);
+            return getMP3Tags(mp3);
         } catch (IOException ex) {
             BackendprocessService.getInstance().logger.error("An error occurred while reading/saving the mp3 file.");
             return null;
