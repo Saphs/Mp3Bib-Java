@@ -9,12 +9,12 @@ import java.util.ArrayList;
 /**
  * This class is implemented as an singelton, use the getInstance() instead of a normal constructor call.
  */
-public class BackendprocessService extends BindableBackend implements Runnable{
+public class BackendprocessService extends BindableBackend implements Runnable {
 
     public Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
 
     private ArrayList<String> requestBuffer = new ArrayList<>();
-    private CommandExecuter commandExecuter = new CommandExecuter();
+    private CommandCaller commandCaller = new CommandCaller();
     private ResponseDistributer responseDistributer = new ResponseDistributer(super.bindables);
 
     private Boolean closeRequest = false;
@@ -35,13 +35,20 @@ public class BackendprocessService extends BindableBackend implements Runnable{
     // Implementation ----------------------------------------------------------------------------------------------------
     @Override
     public void run() {
-      
+
         logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
 
         synchronized (this) {
             while (!closeRequest) {
                 waitForRequest();
-                if (!closeRequest) { executeRequestedCommand(); }
+                if (!closeRequest) {
+
+                    String currentRequest = requestBuffer.get(0);
+                    String response = commandCaller.invoke(currentRequest);
+
+                    responseDistributer.answerAny(response);
+                    requestBuffer.remove(0);
+                }
             }
         }
 
@@ -61,32 +68,12 @@ public class BackendprocessService extends BindableBackend implements Runnable{
 
     @Override
     public void killBackend() {
-        pushRequest("$Kill");
+        pushRequest("sys_Kill");
     }
     //------------------------------------------------------------------------------------------------------------------
 
     // Helper methods --------------------------------------------------------------------------------------------------
-    private void executeRequestedCommand(){
-        String currentRequest = requestBuffer.get(0);
-        String response = "";
-
-        if (CommandValidator.validate(currentRequest)){
-
-
-            try{
-                if (currentRequest.startsWith("$")) response = callSystemCommand(currentRequest);
-                else response = callCommand(currentRequest);
-            }catch(Exception e){
-                logger.error(e.getMessage());
-            }
-        }
-        else response = "Invalid Command.";
-
-        responseDistributer.answerAny(response);
-        requestBuffer.remove(0);
-    }
-
-    private void waitForRequest(){
+    private void waitForRequest() {
         while (requestBuffer.isEmpty()) {
             try {
                 this.wait();
@@ -95,43 +82,10 @@ public class BackendprocessService extends BindableBackend implements Runnable{
             }
         }
     }
-    //------------------------------------------------------------------------------------------------------------------
 
-    // Command calls ---------------------------------------------------------------------------------------------------
-    private String callSystemCommand(String systemCommand) {
-        String commandResult;
-        switch ( systemCommand ) {
-            case "$Kill":
-                this.closeRequest = true;
-                commandResult = "shutdown requested";
-                break;
-
-            default:
-                commandResult = "empty command result";
-                break;
-        }
-        return commandResult;
+    public void giveCloseRequest() {
+        closeRequest = true;
     }
 
-    private String callCommand(String command){
-        String commandResult;
-        switch( command ){
-            case "musicList":
-                commandResult =  commandExecuter.getMusicList();
-                break;
-            case "setPath":
-                commandResult =  commandExecuter.setPath("dummy_path");
-                break;
-            case "edit":
-                commandResult =  commandExecuter.edit("dummy_file");
-                break;
-            case "help":
-                commandResult = commandExecuter.help();
-                break;
-            default:
-                throw new IllegalArgumentException("Command " + command + " was not found in " + getClass().getName());
-        }
-        return commandResult;
-    }
     //------------------------------------------------------------------------------------------------------------------
 }
