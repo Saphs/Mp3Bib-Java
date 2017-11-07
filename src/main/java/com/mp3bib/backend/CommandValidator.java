@@ -1,7 +1,8 @@
 package com.mp3bib.backend;
 
 /**
- * This class will undergo heavy changes as the command & API structure changes
+ * This class will undergo heavy changes as the command and API structure changes
+ * @author Tizian Rettig
  */
 public class CommandValidator {
 

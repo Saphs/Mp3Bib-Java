@@ -13,14 +13,12 @@ public class CustomLogger implements Logger {
 
     /**
      * Logging destination constant for logging to console
-     * @category Constant
      */
     public static final int LOGDESTINATION_CONSOLE = 1;
 
     /**
      * Logging destination constant for logging to file
      * currently not supported
-     * @category Constant
      */
     public static final int LOGDESTINATION_FILE = 2;
 
@@ -56,7 +54,6 @@ public class CustomLogger implements Logger {
      * @param dest the logging destination
      * @see com.mp3bib.logging.CustomLogger#LOGDESTINATION_CONSOLE
      * @see com.mp3bib.logging.CustomLogger#LOGDESTINATION_FILE
-     * @category Setter
      */
     public void setLogDestination(int dest) {
         info("setting Logging Destination to " + dest);
@@ -68,7 +65,6 @@ public class CustomLogger implements Logger {
      * @return the current logging destination
      * @see com.mp3bib.logging.CustomLogger#LOGDESTINATION_CONSOLE
      * @see com.mp3bib.logging.CustomLogger#LOGDESTINATION_FILE
-     * @category Getter
      */
     public int getLogDestination() {
         return currentLogDestination;
