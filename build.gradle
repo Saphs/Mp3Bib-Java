@@ -1,6 +1,21 @@
 apply plugin: 'idea'
 //and standard one
 apply plugin: 'java'
+apply plugin: 'application'
+
+
+mainClassName = "com.mp3bib.Mp3BackendBootstrapper"
+
+run{
+    standardInput = System.in
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "MP3Bib",
+                    "Main-Class": "com.mp3bib.Mp3BackendBootstrapper")
+    }
+}
 
 dependencies {
     compile files('libs/beaglebuddy_mp3.jar')
