@@ -5,6 +5,7 @@ import com.beaglebuddy.mp3.MP3;
 import com.beaglebuddy.mpeg.enums.ChannelMode;
 import com.beaglebuddy.mpeg.enums.Layer;
 import com.beaglebuddy.mpeg.enums.MPEGVersion;
+import org.bson.Document;
 
 public class AllMetaData extends DetailedMetaData {
     DetailedMetaData detailed = new DetailedMetaData();
@@ -46,6 +47,18 @@ public class AllMetaData extends DetailedMetaData {
                 mp3.getLayer(),
                 mp3.getVersion());
     }
+
+    public void appendToDocument(Document doc) {
+        this.detailed.appendToDocument(doc);
+        doc.append("audioSize", this.audioSize);
+        doc.append("lyrics", this.lyrics);
+        doc.append("publisher", this.publisher);
+        doc.append("mpegVersion", this.mpegVersion);
+        doc.append("channelMode", this.channelMode);
+        doc.append("layer", this.layer);
+        doc.append("tagVersion", this.tagVersion);
+    }
+
 
     /**
      * gets detailed

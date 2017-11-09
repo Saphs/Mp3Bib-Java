@@ -2,6 +2,7 @@ package com.mp3bib.model;
 
 import com.beaglebuddy.mp3.MP3;
 import com.beaglebuddy.mpeg.enums.BitrateType;
+import org.bson.Document;
 
 public class DetailedMetaData extends CommonMetaData {
     CommonMetaData common = new CommonMetaData();
@@ -60,6 +61,27 @@ public class DetailedMetaData extends CommonMetaData {
                 mp3.getYear());
     }
 
+    public void appendToDocument(Document doc) {
+        this.common.appendToDocument(doc);
+        doc.append("bitrate", this.bitrate);
+        doc.append("bitrateType", this.bitrateType);
+        doc.append("codec", this.codec);
+        doc.append("comments", this.comments);
+        doc.append("frequency", this.frequency);
+        doc.append("leadPerformer", this.leadPerformer);
+        doc.append("lyricsBy", this.lyricsBy);
+        doc.append("musicBy", this.musicBy);
+        doc.append("rating", this.rating);
+        doc.append("track", this.track);
+        doc.append("year", this.year);
+    }
+
+    public static DetailedMetaData fromDocument(Document doc) {
+        DetailedMetaData detailedMeta = new DetailedMetaData();
+        detailedMeta.setCommon();
+        detailedMeta.setInternalDbID(doc.get(""));
+
+    }
 
     /**
      * gets common
@@ -252,5 +274,4 @@ public class DetailedMetaData extends CommonMetaData {
     public void setYear(int year) {
         this.year = year;
     }
-
 }

@@ -1,6 +1,7 @@
 package com.mp3bib.model;
 
 import com.beaglebuddy.mp3.MP3;
+import org.bson.Document;
 
 /**
  * data type Class for common meta data
@@ -35,7 +36,14 @@ public class CommonMetaData {
                 mp3.getMusicType());
     }
 
-
+    public void appendToDocument(Document doc) {
+        doc.append("id", this.internalDbID);
+        doc.append("title", this.title);
+        doc.append("album", this.album);
+        doc.append("band", this.band);
+        doc.append("audioDuration", this.audioDuration);
+        doc.append("musicType", this.musicType);
+    }
 
     /**
      * gets the Title of the Element
