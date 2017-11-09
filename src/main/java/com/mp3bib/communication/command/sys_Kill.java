@@ -19,12 +19,7 @@ public class sys_Kill extends Command{
     }
 
     @Override
-    public String createSendable(String... args) {
-        return null;
-    }
-
-    @Override
-    public Command buildInstance(String jsonSendable) {
+    public String createSendable() {
         return null;
     }
 }
