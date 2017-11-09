@@ -5,7 +5,6 @@ import com.beaglebuddy.mpeg.enums.BitrateType;
 import org.bson.Document;
 
 public class DetailedMetaData extends CommonMetaData {
-    CommonMetaData common = new CommonMetaData();
     BitrateType bitrateType = null;
     String codec = "";
     String comments = "";
@@ -20,6 +19,21 @@ public class DetailedMetaData extends CommonMetaData {
 
     public DetailedMetaData(){}
 
+    public DetailedMetaData(DetailedMetaData detailed) {
+        super(detailed);
+        this.bitrate = detailed.bitrate;
+        this.bitrateType = detailed.bitrateType;
+        this.codec = detailed.codec;
+        this.comments = detailed.comments;
+        this.frequency = detailed.frequency;
+        this.leadPerformer = detailed.leadPerformer;
+        this.lyricsBy = detailed.lyricsBy;
+        this.musicBy = detailed.musicBy;
+        this.rating = detailed.rating;
+        this.track = detailed.track;
+        this.year = detailed.year;
+    }
+
     public DetailedMetaData(CommonMetaData common,
                             int bitrate,
                             BitrateType bitrateType,
@@ -32,7 +46,7 @@ public class DetailedMetaData extends CommonMetaData {
                             int rating,
                             int track,
                             int year){
-        this.common = common;
+        super(common);
         this.bitrate = bitrate;
         this.bitrateType = bitrateType;
         this.codec = codec;
@@ -62,7 +76,7 @@ public class DetailedMetaData extends CommonMetaData {
     }
 
     public void appendToDocument(Document doc) {
-        this.common.appendToDocument(doc);
+        super.appendToDocument(doc);
         doc.append("bitrate", this.bitrate);
         doc.append("bitrateType", this.bitrateType);
         doc.append("codec", this.codec);
@@ -76,27 +90,21 @@ public class DetailedMetaData extends CommonMetaData {
         doc.append("year", this.year);
     }
 
-    public static DetailedMetaData fromDocument(Document doc) {
-        DetailedMetaData detailedMeta = new DetailedMetaData();
-        detailedMeta.setCommon();
-        detailedMeta.setInternalDbID(doc.get(""));
+    public static DetailedMetaData fromDocument(DetailedMetaData detailedMeta, Document doc) {
+        CommonMetaData.fromDocument(detailedMeta, doc);
 
-    }
-
-    /**
-     * gets common
-     * @return common
-     */
-    public CommonMetaData getCommon() {
-        return common;
-    }
-
-    /**
-     * sets common
-     * @param common common
-     */
-    public void setCommon(CommonMetaData common) {
-        this.common = common;
+        detailedMeta.setBitrate((int) doc.get("bitrate"));
+        detailedMeta.setBitrateType((BitrateType) doc.get("bitrateType"));
+        detailedMeta.setCodec((String) doc.get("codec"));
+        detailedMeta.setComments((String) doc.get("comments"));
+        detailedMeta.setFrequency((int) doc.get("frequency"));
+        detailedMeta.setLeadPerformer((String) doc.get("leadPerformer"));
+        detailedMeta.setLyricsBy((String) doc.get("lyricsBy"));
+        detailedMeta.setMusicBy((String) doc.get("musicBy"));
+        detailedMeta.setRating((int) doc.get("rating"));
+        detailedMeta.setTrack((int) doc.get("track"));
+        detailedMeta.setYear((int) doc.get("year"));
+        return detailedMeta;
     }
 
     /**

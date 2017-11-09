@@ -27,6 +27,15 @@ public class CommonMetaData {
         this.audioDuration = duration;
         this.musicType = type;
     }
+    public CommonMetaData(CommonMetaData common){
+        this.internalDbID = common.internalDbID;
+        this.title = common.title;
+        this.album = common.album;
+        this.band = common.band;
+        this.audioDuration = common.audioDuration;
+        this.musicType = common.musicType;
+    }
+
     public CommonMetaData(int id, MP3 mp3) {
         this(id,
                 mp3.getTitle(),
@@ -45,10 +54,21 @@ public class CommonMetaData {
         doc.append("musicType", this.musicType);
     }
 
-    /**
-     * gets the Title of the Element
-     * @return the title
-     */
+    public static CommonMetaData fromDocument(CommonMetaData commonMeta, Document doc) {
+        commonMeta.setInternalDbID((int) doc.get("id"));
+        commonMeta.setTitle((String) doc.get("title"));
+        commonMeta.setAlbum((String) doc.get("album"));
+        commonMeta.setBand((String) doc.get("band"));
+        commonMeta.setAudioDuration((int) doc.get("audioDuration"));
+        commonMeta.setMusicType((String) doc.get("musicType"));
+
+        return commonMeta;
+    }
+
+        /**
+         * gets the Title of the Element
+         * @return the title
+         */
     public String getTitle() {
         return title;
     }

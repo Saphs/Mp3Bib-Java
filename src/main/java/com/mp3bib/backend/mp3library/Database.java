@@ -57,7 +57,7 @@ public class Database {
      * @return the DetailedMetaData
      */
     public DetailedMetaData getById(int id) throws NotConnectedException {
-        return DetailedMetaData.fromDocument(getCollection().find(eq("id", id)).first());
+        return DetailedMetaData.fromDocument(new DetailedMetaData(), getCollection().find(eq("id", id)).first());
     }
 
     /**

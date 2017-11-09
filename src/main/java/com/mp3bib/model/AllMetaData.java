@@ -8,7 +8,6 @@ import com.beaglebuddy.mpeg.enums.MPEGVersion;
 import org.bson.Document;
 
 public class AllMetaData extends DetailedMetaData {
-    DetailedMetaData detailed = new DetailedMetaData();
     private int audioSize = 0;
     private String lyrics = "";
     private String publisher = "";
@@ -27,7 +26,7 @@ public class AllMetaData extends DetailedMetaData {
                        ChannelMode channelMode,
                        Layer layer,
                        ID3TagVersion tagVersion){
-        this.detailed = detailed;
+        super(detailed);
         this.audioSize = audioSize;
         this.lyrics = lyrics;
         this.publisher = publisher;
@@ -49,7 +48,7 @@ public class AllMetaData extends DetailedMetaData {
     }
 
     public void appendToDocument(Document doc) {
-        this.detailed.appendToDocument(doc);
+        super.appendToDocument(doc);
         doc.append("audioSize", this.audioSize);
         doc.append("lyrics", this.lyrics);
         doc.append("publisher", this.publisher);
@@ -58,23 +57,20 @@ public class AllMetaData extends DetailedMetaData {
         doc.append("layer", this.layer);
         doc.append("tagVersion", this.tagVersion);
     }
+    public static DetailedMetaData fromDocument(AllMetaData allMeta, Document doc) {
+        DetailedMetaData.fromDocument(allMeta, doc);
 
+        allMeta.setAudioSize((int) doc.get("audioSize"));
+        allMeta.setLyrics((String) doc.get("lyrics"));
+        allMeta.setPublisher((String) doc.get("publisher"));
+        allMeta.setMpegVersion((MPEGVersion) doc.get("mpegVersion"));
+        allMeta.setChannelMode((ChannelMode) doc.get("channelMode"));
+        allMeta.setLayer((Layer) doc.get("layer"));
+        allMeta.setTagVersion((ID3TagVersion) doc.get("tagVersion"));
 
-    /**
-     * gets detailed
-     * @return detailed
-     */
-    public DetailedMetaData getDetailed() {
-        return detailed;
+        return allMeta;
     }
 
-    /**
-     * sets detailed
-     * @param detailed detailed
-     */
-    public void setDetailed(DetailedMetaData detailed) {
-        this.detailed = detailed;
-    }
 
     /**
      * gets audioSize
