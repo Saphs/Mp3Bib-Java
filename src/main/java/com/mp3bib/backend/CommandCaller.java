@@ -11,6 +11,14 @@ import java.util.Arrays;
 
 import static com.mp3bib.Mp3BackendBootstrapper.logger;
 
+
+/**
+ * Implements the mapping of requests to functions
+ * and executes them accordingly.
+ *
+ * @author Tizian Rettig - Saphs
+ * @version 1.0.1
+ */
 public class CommandCaller {
 
     /**
@@ -25,8 +33,13 @@ public class CommandCaller {
 
     };
 
-
-    public String invoke(String command){
+    /**
+     * Selects and invokes the corresponding command to a given request.
+     * @param command the given request that is checked and possibly executed.
+     * @return the result of a given command or the String 'Empty response.' if
+     * the command did not match any known command.
+     */
+    String invoke(String command){
         Command choosenCommand = null;
 
         for (Command cmd : knownCommands) {
@@ -37,7 +50,6 @@ public class CommandCaller {
         }
 
         if (choosenCommand != null){
-
             return choosenCommand.invoke(command);
         }
         else {

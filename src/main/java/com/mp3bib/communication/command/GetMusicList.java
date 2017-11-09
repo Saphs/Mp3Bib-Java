@@ -1,5 +1,9 @@
 package com.mp3bib.communication.command;
 
+/**
+ * @author Tizian Rettig - Saphs
+ * @version 1.0.0
+ */
 public class GetMusicList extends Command{
 
     //TODO: implement command

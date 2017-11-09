@@ -8,6 +8,10 @@ import com.mp3bib.communication.BindableFrontend;
 import com.mp3bib.logging.Logger;
 import com.mp3bib.logging.CustomLogger;
 
+/**
+ * @author Tizian Rettig - Saphs
+ * @version 1.0.0
+ */
 public class ConsoleFrontend extends BindableFrontend implements Runnable{
 
     public static Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);

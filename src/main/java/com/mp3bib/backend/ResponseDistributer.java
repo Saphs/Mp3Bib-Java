@@ -5,6 +5,10 @@ import com.mp3bib.communication.BindableFrontend;
 
 import java.util.ArrayList;
 
+/**
+ * @author Tizian Rettig - Saphs
+ * @version 1.0.0
+ */
 public class ResponseDistributer {
 
     private ArrayList<Bindable> boundElements;

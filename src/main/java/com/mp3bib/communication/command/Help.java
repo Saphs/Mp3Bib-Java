@@ -2,6 +2,10 @@ package com.mp3bib.communication.command;
 
 import com.mp3bib.backend.CommandCaller;
 
+/**
+ * @author Tizian Rettig - Saphs
+ * @version 1.0.0
+ */
 public class Help extends Command {
     @Override
     public String invoke(String json) {
