@@ -1,5 +1,6 @@
 package com.mp3bib.backend;
 
+import com.mp3bib.backend.mp3library.Database;
 import com.mp3bib.communication.BindableBackend;
 import com.mp3bib.logging.CustomLogger;
 import com.mp3bib.logging.Logger;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 public class BackendprocessService extends BindableBackend implements Runnable {
 
     public Logger logger;
-
+    public Database database;
     private ArrayList<String> requestBuffer;
     private CommandCaller commandCaller;
     private ResponseDistributer responseDistributer;
@@ -58,6 +59,8 @@ public class BackendprocessService extends BindableBackend implements Runnable {
         logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
 
         synchronized (this) {
+            database = new Database();
+
             while (!closeRequest) {
                 waitForRequest();
                 if (!closeRequest) {

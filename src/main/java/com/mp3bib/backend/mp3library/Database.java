@@ -32,10 +32,10 @@ public class Database {
 
     public Database() {
         try {
-            host = Configuration.getConfigAsString("HOST");
-            port = Configuration.getConfigAsInt("PORT");
-            databaseName = Configuration.getConfigAsString("DATABASE_NAME");
-            collectionName = Configuration.getConfigAsString("COLLECTION_NAME");
+            this.host = Configuration.getConfigAsString("HOST");
+            this.port = Configuration.getConfigAsInt("PORT");
+            this.databaseName = Configuration.getConfigAsString("DATABASE_NAME");
+            this.collectionName = Configuration.getConfigAsString("COLLECTION_NAME");
         } catch (IOException e) {
             BackendprocessService.getInstance().logger.error(e.toString());
         }
