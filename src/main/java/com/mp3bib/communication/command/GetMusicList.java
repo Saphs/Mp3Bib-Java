@@ -8,18 +8,17 @@ public class GetMusicList extends Command{
 
     //TODO: implement command
 
+    public GetMusicList(){
+
+    }
+
     @Override
     public String invoke(String json) {
         return "Get music command did something!";
     }
 
     @Override
-    public String createSendable(String... args) {
-        return null;
-    }
-
-    @Override
-    public Command buildInstance(String jsonSendable) {
+    public String createSendable() {
         return null;
     }
 
