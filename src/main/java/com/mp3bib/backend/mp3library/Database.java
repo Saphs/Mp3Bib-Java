@@ -7,9 +7,13 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
+import com.mp3bib.Configuration;
+import com.mp3bib.backend.BackendprocessService;
 import com.mp3bib.model.CommonMetaData;
 import com.mp3bib.model.DetailedMetaData;
 import org.bson.Document;
+
+import java.io.IOException;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -27,6 +31,14 @@ public class Database {
     private String collectionName = "musicDB";
 
     public Database() {
+        try {
+            host = Configuration.getConfigAsString("HOST");
+            port = Configuration.getConfigAsInt("PORT");
+            databaseName = Configuration.getConfigAsString("DATABASE_NAME");
+            collectionName = Configuration.getConfigAsString("COLLECTION_NAME");
+        } catch (IOException e) {
+            BackendprocessService.getInstance().logger.error(e.toString());
+        }
         this.connectToDB();
     }
 
