@@ -18,24 +18,33 @@ import java.util.ArrayList;
  */
 public class BackendprocessService extends BindableBackend implements Runnable {
 
-    public Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);
+    public Logger logger;
 
-    private ArrayList<String> requestBuffer = new ArrayList<>();
-    private CommandCaller commandCaller = new CommandCaller();
-    private ResponseDistributer responseDistributer = new ResponseDistributer(super.bindables);
+    private ArrayList<String> requestBuffer;
+    private CommandCaller commandCaller;
+    private ResponseDistributer responseDistributer;
 
-    private Boolean closeRequest = false;
+    private Boolean closeRequest;
 
     // Singelton implementation ----------------------------------------------------------------------------------------
     private static BackendprocessService instance;
 
     private BackendprocessService() {
+        instance = this;
+
+        logger = new CustomLogger(Logger.LOGLEVEL_INFO);
         logger.debug("New Object of " + getClass().getName() + "instantiated.");
+
+        requestBuffer = new ArrayList<>();
+        commandCaller = new CommandCaller();
+        responseDistributer = new ResponseDistributer(super.bindables);
+
+        closeRequest = false;
     }
 
     public static BackendprocessService getInstance() {
         if (instance == null) {
-            instance = new BackendprocessService();
+            new BackendprocessService();
         }
         return instance;
     }
