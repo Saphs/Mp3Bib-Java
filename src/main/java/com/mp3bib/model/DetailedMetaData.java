@@ -75,6 +75,10 @@ public class DetailedMetaData extends CommonMetaData {
                 mp3.getYear());
     }
 
+    /**
+     * appends the data from this DetailedMetaData Object to a MongoDB Document
+     * @param doc the MongoDB Document to append to
+     */
     public void appendToDocument(Document doc) {
         super.appendToDocument(doc);
         doc.append("bitrate", this.bitrate);
@@ -90,6 +94,12 @@ public class DetailedMetaData extends CommonMetaData {
         doc.append("year", this.year);
     }
 
+    /**
+     * create a DetailedMetaData Object from a MongoDB Document
+     * @param detailedMeta the DetailedMetaData Object to write the data to
+     * @param doc the MongoDB Object
+     * @return the DetailedMetaData Object
+     */
     public static DetailedMetaData fromDocument(DetailedMetaData detailedMeta, Document doc) {
         CommonMetaData.fromDocument(detailedMeta, doc);
 

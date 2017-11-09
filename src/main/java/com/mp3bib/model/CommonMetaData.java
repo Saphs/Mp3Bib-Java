@@ -45,6 +45,10 @@ public class CommonMetaData {
                 mp3.getMusicType());
     }
 
+    /**
+     * appends the data from this CommonMetaData Object to a MongoDB Document
+     * @param doc the MongoDB Document to append to
+     */
     public void appendToDocument(Document doc) {
         doc.append("id", this.internalDbID);
         doc.append("title", this.title);
@@ -54,6 +58,12 @@ public class CommonMetaData {
         doc.append("musicType", this.musicType);
     }
 
+    /**
+     * create a CommonMetaData Object from a MongoDB Document
+     * @param commonMeta the CommonMetaData Object to write the data to
+     * @param doc the MongoDB Object
+     * @return the CommonMetaData Object
+     */
     public static CommonMetaData fromDocument(CommonMetaData commonMeta, Document doc) {
         commonMeta.setInternalDbID((int) doc.get("id"));
         commonMeta.setTitle((String) doc.get("title"));
@@ -65,10 +75,10 @@ public class CommonMetaData {
         return commonMeta;
     }
 
-        /**
-         * gets the Title of the Element
-         * @return the title
-         */
+    /**
+    * gets the Title of the Element
+    * @return the title
+    */
     public String getTitle() {
         return title;
     }

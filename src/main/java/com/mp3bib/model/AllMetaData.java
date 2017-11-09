@@ -47,6 +47,10 @@ public class AllMetaData extends DetailedMetaData {
                 mp3.getVersion());
     }
 
+    /**
+     * appends the data from this AllMetaData Object to a MongoDB Document
+     * @param doc the MongoDB Document to append to
+     */
     public void appendToDocument(Document doc) {
         super.appendToDocument(doc);
         doc.append("audioSize", this.audioSize);
@@ -57,7 +61,14 @@ public class AllMetaData extends DetailedMetaData {
         doc.append("layer", this.layer);
         doc.append("tagVersion", this.tagVersion);
     }
-    public static DetailedMetaData fromDocument(AllMetaData allMeta, Document doc) {
+
+    /**
+     * create a AllMetaData Object from a MongoDB Document
+     * @param allMeta the AllMetaData Object to write the data to
+     * @param doc the MongoDB Object
+     * @return the AllMetaData Object
+     */
+    public static AllMetaData fromDocument(AllMetaData allMeta, Document doc) {
         DetailedMetaData.fromDocument(allMeta, doc);
 
         allMeta.setAudioSize((int) doc.get("audioSize"));
