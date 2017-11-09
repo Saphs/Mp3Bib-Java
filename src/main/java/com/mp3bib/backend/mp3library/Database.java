@@ -58,7 +58,7 @@ public class Database {
     public int addEntry(MP3 mp3) throws NotConnectedException {
         Document doc = createDocumentFromMp3(mp3);
         this.getCollection().insertOne(doc);
-        return (int) doc.get("id");
+        return 0;//(int) doc.get("id");
     }
 
     /**
@@ -122,7 +122,13 @@ public class Database {
     }
 
     private int getLargestID() throws NotConnectedException {
-        return (int) getCollection().find().sort(Sorts.descending("id")).limit(1).first().get("id");
+        try {
+            int largestID = (int) getCollection().find().sort(Sorts.descending("id")).limit(1).first().get("id");
+            return largestID;
+        } catch (Exception e) {
+            BackendprocessService.getInstance().logger.error("couldnt find largest id" + e.toString());
+        }
+        return 1;
     }
 
     private Document createDocumentFromMp3(MP3 mp3) throws NotConnectedException {
