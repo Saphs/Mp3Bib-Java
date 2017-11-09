@@ -2,10 +2,12 @@ package com.mp3bib.backend.mp3library;
 
 import com.beaglebuddy.mp3.MP3;
 import com.google.gson.Gson;
+import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
+import com.mp3bib.model.CommonMetaData;
 import com.mp3bib.model.DetailedMetaData;
 import org.bson.Document;
 
@@ -72,6 +74,20 @@ public class Database {
      */
     public String getFilePathByID(int id) throws NotConnectedException {
         return (String) getCollection().find(eq("id", id)).first().get("path");
+    }
+
+    public CommonMetaData[] getAll() throws NotConnectedException {
+        CommonMetaData[] commonList = new CommonMetaData[(int) this.getCount()];
+        Block<Document> listBlock = new Block<Document>() {
+            private int i = 0;
+            @Override
+            public void apply(final Document document) {
+                commonList[i] = gson.fromJson(document.toJson(), CommonMetaData.class);
+                i++;
+            }
+        };
+        getCollection().find().forEach(listBlock);
+        return commonList;
     }
 
 
