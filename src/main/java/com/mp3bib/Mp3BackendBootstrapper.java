@@ -6,9 +6,11 @@ import com.mp3bib.logging.CustomLogger;
 import com.mp3bib.logging.Logger;
 
 /**
- * By Tizian Rettig
+ * Gives entry point for starting
+ *
+ * @author Tizian Rettig - Saphs
+ * @version 1.0.0
  */
-
 public class Mp3BackendBootstrapper {
 
     public static Logger logger = new CustomLogger(Logger.LOGLEVEL_INFO);

@@ -7,7 +7,14 @@ import java.util.ArrayList;
 
 
 /**
- * This class is implemented as an singelton, use the getInstance() instead of a normal constructor call.
+ * Gives an single point of access to request data from the backend via
+ * defined request and response types in form of (soon to be) Json-Strings.
+ *
+ * This class is implemented as an singleton,
+ * use the getInstance() instead of a normal constructor call.
+ *
+ * @author Tizian Rettig - Saphs
+ * @version 1.0.1
  */
 public class BackendprocessService extends BindableBackend implements Runnable {
 
