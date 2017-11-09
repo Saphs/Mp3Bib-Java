@@ -27,13 +27,16 @@ public class BackendprocessService extends BindableBackend implements Runnable {
     private Boolean closeRequest = false;
 
     // Singelton implementation ----------------------------------------------------------------------------------------
-    private static final BackendprocessService instance = new BackendprocessService();
+    private static BackendprocessService instance;
 
     private BackendprocessService() {
         logger.debug("New Object of " + getClass().getName() + "instantiated.");
     }
 
     public static BackendprocessService getInstance() {
+        if (instance == null) {
+            instance = new BackendprocessService();
+        }
         return instance;
     }
     //------------------------------------------------------------------------------------------------------------------
