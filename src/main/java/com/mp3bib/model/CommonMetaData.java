@@ -1,5 +1,7 @@
 package com.mp3bib.model;
 
+import com.beaglebuddy.mp3.MP3;
+
 /**
  * data type Class for common meta data
  * @author Daniel Liebler
@@ -12,6 +14,28 @@ public class CommonMetaData {
     private String band = "";
     private int audioDuration = 0;
     private String musicType = "";
+
+
+    public CommonMetaData(){}
+
+    public CommonMetaData(int id, String title, String album, String band, int duration, String type){
+        this.internalDbID = id;
+        this.title = title;
+        this.album = album;
+        this.band = band;
+        this.audioDuration = duration;
+        this.musicType = type;
+    }
+    public CommonMetaData(int id, MP3 mp3) {
+        this(id,
+                mp3.getTitle(),
+                mp3.getAlbum(),
+                mp3.getBand(),
+                mp3.getAudioDuration(),
+                mp3.getMusicType());
+    }
+
+
 
     /**
      * gets the Title of the Element
@@ -108,15 +132,4 @@ public class CommonMetaData {
     public void setInternalDbID(int internalDbID) {
         this.internalDbID = internalDbID;
     }
-
-    public CommonMetaData(int id, String title, String album, String band, int duration, String type){
-        this.internalDbID = id;
-        this.title = title;
-        this.album = album;
-        this.band = band;
-        this.audioDuration = duration;
-        this.musicType = type;
-    }
-
-    public CommonMetaData(){}
 }

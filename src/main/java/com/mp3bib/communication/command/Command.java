@@ -1,5 +1,6 @@
 package com.mp3bib.communication.command;
 
+import com.google.gson.Gson;
 import com.mp3bib.backend.BackendprocessService;
 
 /**
@@ -12,6 +13,7 @@ import com.mp3bib.backend.BackendprocessService;
  */
 public abstract class Command {
 
+    protected final Gson gson = new Gson();
     final BackendprocessService backend = BackendprocessService.getInstance();
     final String commandName = this.getClass().getSimpleName();
 
@@ -34,7 +36,6 @@ public abstract class Command {
     /**
      * 'createSendable' is meant to be implemented as a static method to provide
      * an easy way to send a given command as a Json-String.
-     * @param args provide potential arguments for more complex requests.
      * @return needs to provide a Json-String that can be send directly.
      */
     public abstract String createSendable();

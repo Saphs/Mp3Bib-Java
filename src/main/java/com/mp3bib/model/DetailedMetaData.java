@@ -1,5 +1,6 @@
 package com.mp3bib.model;
 
+import com.beaglebuddy.mp3.MP3;
 import com.beaglebuddy.mpeg.enums.BitrateType;
 
 public class DetailedMetaData extends CommonMetaData {
@@ -15,6 +16,8 @@ public class DetailedMetaData extends CommonMetaData {
     int rating = 0;
     int track = 0;
     int year = 0;
+
+    public DetailedMetaData(){}
 
     public DetailedMetaData(CommonMetaData common,
                             int bitrate,
@@ -41,6 +44,23 @@ public class DetailedMetaData extends CommonMetaData {
         this.track = track;
         this.year = year;
     }
+
+    public DetailedMetaData(int id, MP3 mp3) {
+        this(new CommonMetaData(id, mp3),
+                mp3.getBitrate(),
+                mp3.getBitrateType(),
+                mp3.getCodec(),
+                mp3.getComments(),
+                mp3.getFrequency(),
+                mp3.getLeadPerformer(),
+                mp3.getLyricsBy(),
+                mp3.getMusicBy(),
+                mp3.getRating(),
+                mp3.getTrack(),
+                mp3.getYear());
+    }
+
+
     /**
      * gets common
      * @return common

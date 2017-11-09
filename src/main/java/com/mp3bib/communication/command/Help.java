@@ -13,7 +13,7 @@ public class Help extends Command {
         for (Command cmd : CommandCaller.getKnownCommands()){
             commandList = commandList.append(cmd.getClass().getSimpleName()).append(' ');
         }
-        return commandList.toString();
+        return gson.toJson(commandList);
     }
 
     @Override

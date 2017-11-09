@@ -1,20 +1,23 @@
 package com.mp3bib.communication.command;
 
+import com.mp3bib.model.CommonMetaData;
+
 /**
  * @author Tizian Rettig - Saphs
+ * @author Daniel Liebler
  * @version 1.0.0
  */
 public class GetMusicList extends Command{
 
-    //TODO: implement command
-
-    public GetMusicList(){
-
-    }
+    public GetMusicList(){}
 
     @Override
     public String invoke(String json) {
-        return "Get music command did something!";
+        CommonMetaData[] list = null;
+        //TODO: implement getMusicList in DB connector
+        // list = getMusicList();
+        String txt = gson.toJson(list);
+        return txt;
     }
 
     @Override

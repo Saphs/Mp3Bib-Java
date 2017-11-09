@@ -17,6 +17,11 @@ jar {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
+    compile 'com.google.code.gson:gson:2.2.4'
     compile files('libs/beaglebuddy_mp3.jar')
 }
