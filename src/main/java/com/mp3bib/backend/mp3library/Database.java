@@ -1,6 +1,7 @@
 package com.mp3bib.backend.mp3library;
 
 import com.beaglebuddy.mp3.MP3;
+import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -11,6 +12,8 @@ import org.bson.Document;
 import static com.mongodb.client.model.Filters.eq;
 
 public class Database {
+
+    private final Gson gson = new Gson();
 
     private MongoClient client;
     private MongoDatabase musicDB;
@@ -38,8 +41,10 @@ public class Database {
      * @param mp3 a MP3 Object for the entry
      * @throws NotConnectedException
      */
-    public void addEntry(MP3 mp3) throws NotConnectedException {
-        this.getCollection().insertOne(createDocumentFromMp3(mp3));
+    public int addEntry(MP3 mp3) throws NotConnectedException {
+        Document doc = createDocumentFromMp3(mp3);
+        this.getCollection().insertOne(doc);
+        return (int) doc.get("id");
     }
 
     /**
@@ -57,7 +62,7 @@ public class Database {
      * @return the DetailedMetaData
      */
     public DetailedMetaData getById(int id) throws NotConnectedException {
-        return DetailedMetaData.fromDocument(new DetailedMetaData(), getCollection().find(eq("id", id)).first());
+        return gson.fromJson(getCollection().find(eq("id", id)).first().toJson(), DetailedMetaData.class);
     }
 
     /**
@@ -94,9 +99,9 @@ public class Database {
 
     private Document createDocumentFromMp3(MP3 mp3) throws NotConnectedException {
         int id = getLargestID() + 1;
-        Document doc = new Document("path", mp3.getPath());
         DetailedMetaData metaData = new DetailedMetaData(id, mp3);
-        metaData.appendToDocument(doc);
+        Document doc = Document.parse(gson.toJson(metaData));
+        doc.append("path", mp3.getPath());
         return doc;
     }
 }
