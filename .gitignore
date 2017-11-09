@@ -1,6 +1,7 @@
 out/
 .idea/
 .gradle/
+gradle/
 Mp3Bib.iml
 build/
 *.bak
