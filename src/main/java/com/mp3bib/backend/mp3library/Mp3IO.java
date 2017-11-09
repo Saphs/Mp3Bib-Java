@@ -19,17 +19,12 @@ public class Mp3IO {
 
     public static MP3 getMP3Tags(MP3 mp3){
         try {
-            if (!checkMp3Errors(mp3)) {
-                return null;
-            }
-
-            if (mp3.getAudioDuration() == 0)       // otherwise, if the length of the song hasn't been specified,
-                mp3.setAudioDuration();             // then calculate it from the mpeg audio frames
-
+            if (!checkMp3Errors(mp3)) return null;                      // check for errors in Mp3-Tags
+            if (mp3.getAudioDuration() == 0)  mp3.setAudioDuration();   // calculate audio duration if not already done
             mp3.save();
             return mp3;
         } catch (IOException ex) {
-            BackendprocessService.getInstance().logger.error("An error occurred while reading/saving the mp3 file.");
+            BackendprocessService.getInstance().logger.error("An error occurred while saving the mp3 file: " + mp3.toString());
             return null;
         }
     }
@@ -38,7 +33,7 @@ public class Mp3IO {
             MP3 mp3 = new MP3(file);
             return getMP3Tags(mp3);
         } catch (IOException ex) {
-            BackendprocessService.getInstance().logger.error("An error occurred while reading/saving the mp3 file.");
+            BackendprocessService.getInstance().logger.error("An error occurred while creating mp3 from file: " + file.toString());
             return null;
         }
     }
@@ -47,12 +42,13 @@ public class Mp3IO {
             MP3 mp3 = new MP3(dir);
             return getMP3Tags(mp3);
         } catch (IOException ex) {
-            BackendprocessService.getInstance().logger.error("An error occurred while reading/saving the mp3 file.");
+            BackendprocessService.getInstance().logger.error("An error occurred while creating mp3 from path: " + dir);
             return null;
         }
     }
 
-    public static void indiceFiles(File dir) throws FileNotFoundException {
+
+    private static void indiceFiles(File dir) throws FileNotFoundException {
         if (!dir.exists()) {
             throw new FileNotFoundException();
         }
@@ -66,28 +62,22 @@ public class Mp3IO {
     }
 
     private static boolean checkMp3Errors(MP3 mp3) throws IOException {
-        // if there was any invalid information (ie, ID3v2.x frames) in the .mp3 file,
-        // then display the errors to the user
-        if (mp3.hasErrors()) {                                      // display the errors that were found
+        if (mp3.hasErrors()) {                                              // check for tag errors
             List<String> errors = mp3.getErrors();
             for(String error : errors) {
-                BackendprocessService.getInstance().logger.error(error);
+                BackendprocessService.getInstance().logger.error(error);    // log tag errors
             }
             mp3.save();
-            return false;                       // discard the invalid information (ID3v2.x frames) and
-        }                                       // save only the valid frames back to the .mp3 file
-
-        // see if the .mp3 file has valid MPEG audio frames
-        List<String> errors = mp3.validateMPEGFrames();
-
-        if (errors.size() != 0)
-        {
-            for(String error : errors) {
-                BackendprocessService.getInstance().logger.error(error);
-            }
             return false;
         }
 
+        List<String> errors = mp3.validateMPEGFrames();                     // check for MPEG-frame errors
+        if (errors.size() != 0) {
+            for(String error : errors) {
+                BackendprocessService.getInstance().logger.error(error);    // MPEG-frame errors
+            }
+            return false;
+        }
         return true;
     }
 
