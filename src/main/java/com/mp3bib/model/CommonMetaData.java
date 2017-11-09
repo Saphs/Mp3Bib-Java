@@ -1,6 +1,7 @@
 package com.mp3bib.model;
 
 import com.beaglebuddy.mp3.MP3;
+import org.bson.Document;
 
 /**
  * data type Class for common meta data
@@ -26,6 +27,15 @@ public class CommonMetaData {
         this.audioDuration = duration;
         this.musicType = type;
     }
+    public CommonMetaData(CommonMetaData common){
+        this.internalDbID = common.internalDbID;
+        this.title = common.title;
+        this.album = common.album;
+        this.band = common.band;
+        this.audioDuration = common.audioDuration;
+        this.musicType = common.musicType;
+    }
+
     public CommonMetaData(int id, MP3 mp3) {
         this(id,
                 mp3.getTitle(),
@@ -35,12 +45,40 @@ public class CommonMetaData {
                 mp3.getMusicType());
     }
 
-
+    /**
+     * appends the data from this CommonMetaData Object to a MongoDB Document
+     * @param doc the MongoDB Document to append to
+     */
+    public void appendToDocument(Document doc) {
+        doc.append("id", this.internalDbID);
+        doc.append("title", this.title);
+        doc.append("album", this.album);
+        doc.append("band", this.band);
+        doc.append("audioDuration", this.audioDuration);
+        doc.append("musicType", this.musicType);
+    }
 
     /**
-     * gets the Title of the Element
-     * @return the title
+     * create a CommonMetaData Object from a MongoDB Document
+     * @param commonMeta the CommonMetaData Object to write the data to
+     * @param doc the MongoDB Object
+     * @return the CommonMetaData Object
      */
+    public static CommonMetaData fromDocument(CommonMetaData commonMeta, Document doc) {
+        commonMeta.setInternalDbID((int) doc.get("id"));
+        commonMeta.setTitle((String) doc.get("title"));
+        commonMeta.setAlbum((String) doc.get("album"));
+        commonMeta.setBand((String) doc.get("band"));
+        commonMeta.setAudioDuration((int) doc.get("audioDuration"));
+        commonMeta.setMusicType((String) doc.get("musicType"));
+
+        return commonMeta;
+    }
+
+    /**
+    * gets the Title of the Element
+    * @return the title
+    */
     public String getTitle() {
         return title;
     }

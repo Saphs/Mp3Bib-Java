@@ -5,9 +5,9 @@ import com.beaglebuddy.mp3.MP3;
 import com.beaglebuddy.mpeg.enums.ChannelMode;
 import com.beaglebuddy.mpeg.enums.Layer;
 import com.beaglebuddy.mpeg.enums.MPEGVersion;
+import org.bson.Document;
 
 public class AllMetaData extends DetailedMetaData {
-    DetailedMetaData detailed = new DetailedMetaData();
     private int audioSize = 0;
     private String lyrics = "";
     private String publisher = "";
@@ -26,7 +26,7 @@ public class AllMetaData extends DetailedMetaData {
                        ChannelMode channelMode,
                        Layer layer,
                        ID3TagVersion tagVersion){
-        this.detailed = detailed;
+        super(detailed);
         this.audioSize = audioSize;
         this.lyrics = lyrics;
         this.publisher = publisher;
@@ -48,20 +48,40 @@ public class AllMetaData extends DetailedMetaData {
     }
 
     /**
-     * gets detailed
-     * @return detailed
+     * appends the data from this AllMetaData Object to a MongoDB Document
+     * @param doc the MongoDB Document to append to
      */
-    public DetailedMetaData getDetailed() {
-        return detailed;
+    public void appendToDocument(Document doc) {
+        super.appendToDocument(doc);
+        doc.append("audioSize", this.audioSize);
+        doc.append("lyrics", this.lyrics);
+        doc.append("publisher", this.publisher);
+        doc.append("mpegVersion", this.mpegVersion);
+        doc.append("channelMode", this.channelMode);
+        doc.append("layer", this.layer);
+        doc.append("tagVersion", this.tagVersion);
     }
 
     /**
-     * sets detailed
-     * @param detailed detailed
+     * create a AllMetaData Object from a MongoDB Document
+     * @param allMeta the AllMetaData Object to write the data to
+     * @param doc the MongoDB Object
+     * @return the AllMetaData Object
      */
-    public void setDetailed(DetailedMetaData detailed) {
-        this.detailed = detailed;
+    public static AllMetaData fromDocument(AllMetaData allMeta, Document doc) {
+        DetailedMetaData.fromDocument(allMeta, doc);
+
+        allMeta.setAudioSize((int) doc.get("audioSize"));
+        allMeta.setLyrics((String) doc.get("lyrics"));
+        allMeta.setPublisher((String) doc.get("publisher"));
+        allMeta.setMpegVersion((MPEGVersion) doc.get("mpegVersion"));
+        allMeta.setChannelMode((ChannelMode) doc.get("channelMode"));
+        allMeta.setLayer((Layer) doc.get("layer"));
+        allMeta.setTagVersion((ID3TagVersion) doc.get("tagVersion"));
+
+        return allMeta;
     }
+
 
     /**
      * gets audioSize

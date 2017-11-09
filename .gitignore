@@ -3,3 +3,4 @@ out/
 .gradle/
 Mp3Bib.iml
 build/
+*.bak

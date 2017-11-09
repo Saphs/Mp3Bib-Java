@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 mainClassName = "com.mp3bib.Mp3BackendBootstrapper"
 
-run{
+run {
     standardInput = System.in
 }
 
@@ -23,5 +23,6 @@ repositories {
 
 dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'org.mongodb:mongodb-driver:3.5.0'
     compile files('libs/beaglebuddy_mp3.jar')
 }
