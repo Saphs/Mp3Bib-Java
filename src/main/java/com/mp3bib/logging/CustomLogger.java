@@ -11,6 +11,15 @@ import java.util.Date;
  */
 public class CustomLogger implements Logger {
 
+    private static final String COLOR_RESET = (char)27 + "[0m";
+    private static final String COLOR_BOLD_RED = (char)27 + "[31;43;1m";
+    private static final String COLOR_RED = (char)27 + "[31m";
+    private static final String COLOR_MAGENTA = (char)27 + "[35m";
+    private static final String COLOR_YELLOW = (char)27 + "[33m";
+    private static final String COLOR_GREEN = (char)27 + "[32m";
+    private static final String COLOR_WHITE = (char)27 + "[37m";
+
+
     /**
      * Logging destination constant for logging to console
      */
@@ -29,15 +38,22 @@ public class CustomLogger implements Logger {
 
     public CustomLogger(int logLevel, int logDestination) {
         super();
-        setLogDestination(logDestination);
-        setLogLevel(logLevel);
+        currentLogDestination = logDestination;
+        currentLogLevel = logLevel;
+        logLoggingConf();
     }
     public CustomLogger(int logLevel) {
         super();
-        setLogLevel(logLevel);
+        currentLogLevel = logLevel;
+        logLoggingConf();
     }
     public CustomLogger() {
         super();
+        logLoggingConf();
+    }
+
+    private void logLoggingConf() {
+        log("Logging everything till Loglevel   " + currentLogLevel + "   to Destination   " + currentLogDestination, (char)27 + "[46;30;1m");
     }
 
     public void setLogLevel(int logLevel) {
@@ -80,7 +96,7 @@ public class CustomLogger implements Logger {
      */
     public void trace(String customText) {
         if (currentLogLevel >= LOGLEVEL_TRACE) {
-            log(customText);
+            log(customText, COLOR_WHITE);
         }
     }
     /**
@@ -90,7 +106,7 @@ public class CustomLogger implements Logger {
      */
     public void debug(String customText) {
         if (currentLogLevel >= LOGLEVEL_DEBUG) {
-            log(customText);
+            log(customText, COLOR_GREEN);
         }
     }
     /**
@@ -100,7 +116,7 @@ public class CustomLogger implements Logger {
      */
     public void info(String customText) {
         if (currentLogLevel >= LOGLEVEL_INFO) {
-            log(customText);
+            log(customText, COLOR_YELLOW);
         }
     }
     /**
@@ -110,7 +126,7 @@ public class CustomLogger implements Logger {
      */
     public void warn(String customText) {
         if (currentLogLevel >= LOGLEVEL_WARN) {
-            log(customText);
+            log(customText, COLOR_MAGENTA);
         }
     }
     /**
@@ -120,7 +136,7 @@ public class CustomLogger implements Logger {
      */
     public void error(String customText) {
         if (currentLogLevel >= LOGLEVEL_ERROR) {
-            log(customText);
+            log(customText, COLOR_RED);
         }
     }
     /**
@@ -130,19 +146,19 @@ public class CustomLogger implements Logger {
      */
     public void fatal(String customText) {
         if (currentLogLevel >= LOGLEVEL_FATAL) {
-            log(customText);
+            log(customText, COLOR_BOLD_RED);
         }
     }
     //------------------------------------------------------------------------------------------------------------------
 
 
     //function to log nevertheless which loglevel is used
-    private void log(String customText) {
+    private void log(String customText, String color) {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
 
         String dateString = formatter.format(date);
-        String out = String.format("%s %s        %s", dateString, getCallerInfo(), customText);
+        String out = String.format("%s%s %s        %s" + COLOR_RESET, color, dateString, getCallerInfo(), customText);
         switch (currentLogDestination) {
             case LOGDESTINATION_CONSOLE:
                 System.out.println(out);

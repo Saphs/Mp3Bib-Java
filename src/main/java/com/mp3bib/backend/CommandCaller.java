@@ -1,9 +1,8 @@
 package com.mp3bib.backend;
 
-import com.mp3bib.communication.command.Command;
-import com.mp3bib.communication.command.GetMusicList;
-import com.mp3bib.communication.command.Help;
-import com.mp3bib.communication.command.sys_Kill;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.mp3bib.communication.command.*;
 import com.mp3bib.logging.Logger;
 
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ public class CommandCaller {
 
             new GetMusicList(),
             new Help(),
-            new sys_Kill()
-
+            new sys_Kill(),
+            new GetDetailedMetadata()
     };
 
     /**
@@ -42,8 +41,16 @@ public class CommandCaller {
     String invoke(String command){
         Command choosenCommand = null;
 
+        JsonElement jelem = BackendprocessService.gson.fromJson(command, JsonElement.class);
+        JsonObject jobj = jelem.getAsJsonObject();
+        if (!jobj.has("commandName") || !jobj.get("commandName").isJsonPrimitive() || !jobj.get("commandName").getAsJsonPrimitive().isString()) {
+            return "Command Failed";
+        }
+
+        String cmdName = jobj.get("commandName").getAsJsonPrimitive().getAsString();
+
         for (Command cmd : knownCommands) {
-            if (cmd.meetsConstraints(command)){
+            if (cmd.meetsConstraints(cmdName)){
                 choosenCommand = cmd;
                 break;
             }

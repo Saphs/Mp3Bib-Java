@@ -130,7 +130,7 @@ public class Database {
             int largestID = (int) getCollection().find().sort(Sorts.descending("internalDbID")).limit(1).first().get("internalDbID");
             return largestID;
         } catch (Exception e) {
-            BackendprocessService.getInstance().logger.error("couldnt find largest id" + e.toString());
+            BackendprocessService.getInstance().logger.error("couldnt find largest id " + e.toString());
         }
         return 1;
     }

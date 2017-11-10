@@ -1,5 +1,6 @@
 package com.mp3bib.backend;
 
+import com.google.gson.Gson;
 import com.mp3bib.backend.mp3library.Database;
 import com.mp3bib.backend.mp3library.Mp3IO;
 import com.mp3bib.communication.BindableBackend;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
  */
 public class BackendprocessService extends BindableBackend implements Runnable {
 
+    public static final Gson gson = new Gson();
     public Logger logger;
     public Database database;
     private ArrayList<String> requestBuffer;

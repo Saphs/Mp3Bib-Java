@@ -9,27 +9,27 @@ public interface Logger {
     /**
      * Logging Level constant for logging everything
      */
-    public final int LOGLEVEL_TRACE = 1;
+    public final int LOGLEVEL_TRACE = 6;
     /**
      * Logging Level constant for logging debug information
      */
-    public final int LOGLEVEL_DEBUG = 2;
+    public final int LOGLEVEL_DEBUG = 5;
     /**
      * Logging Level constant for logging information
      */
-    public final int LOGLEVEL_INFO = 3;
+    public final int LOGLEVEL_INFO = 4;
     /**
      * Logging Level constant for logging warnings
      */
-    public final int LOGLEVEL_WARN = 4;
+    public final int LOGLEVEL_WARN = 3;
     /**
      * Logging Level constant for logging error states
      */
-    public final int LOGLEVEL_ERROR = 5;
+    public final int LOGLEVEL_ERROR = 2;
     /**
      * Logging Level constant for logging fatal occurrences
      */
-    public final int LOGLEVEL_FATAL = 6;
+    public final int LOGLEVEL_FATAL = 1;
 
     /**
      * set the LogLevel
