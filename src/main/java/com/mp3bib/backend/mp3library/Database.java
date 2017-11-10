@@ -50,6 +50,10 @@ public class Database {
         this.connectToDB();
     }
 
+    public void clearDB() throws NotConnectedException {
+        this.getCollection().drop();
+    }
+
     /**
      * adds an entry to the DB
      * @param mp3 a MP3 Object for the entry
@@ -58,7 +62,7 @@ public class Database {
     public int addEntry(MP3 mp3) throws NotConnectedException {
         Document doc = createDocumentFromMp3(mp3);
         this.getCollection().insertOne(doc);
-        return 0;//(int) doc.get("id");
+        return (int) doc.get("internalDbID");
     }
 
     /**
@@ -76,7 +80,7 @@ public class Database {
      * @return the DetailedMetaData
      */
     public DetailedMetaData getById(int id) throws NotConnectedException {
-        return gson.fromJson(getCollection().find(eq("id", id)).first().toJson(), DetailedMetaData.class);
+        return gson.fromJson(getCollection().find(eq("internalDbID", id)).first().toJson(), DetailedMetaData.class);
     }
 
     /**
@@ -85,7 +89,7 @@ public class Database {
      * @return the DetailedMetaData
      */
     public String getFilePathByID(int id) throws NotConnectedException {
-        return (String) getCollection().find(eq("id", id)).first().get("path");
+        return (String) getCollection().find(eq("internalDbID", id)).first().get("path");
     }
 
     public CommonMetaData[] getAll() throws NotConnectedException {
@@ -123,7 +127,7 @@ public class Database {
 
     private int getLargestID() throws NotConnectedException {
         try {
-            int largestID = (int) getCollection().find().sort(Sorts.descending("id")).limit(1).first().get("id");
+            int largestID = (int) getCollection().find().sort(Sorts.descending("internalDbID")).limit(1).first().get("internalDbID");
             return largestID;
         } catch (Exception e) {
             BackendprocessService.getInstance().logger.error("couldnt find largest id" + e.toString());
