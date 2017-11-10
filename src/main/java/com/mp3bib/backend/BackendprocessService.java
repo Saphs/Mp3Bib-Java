@@ -65,6 +65,7 @@ public class BackendprocessService extends BindableBackend implements Runnable {
         synchronized (this) {
             database = new Database();
             try {
+                database.clearDB();
                 Mp3IO.indirectIndiceDirectories(new File("MusicLibrary.conf"));
             } catch (IOException e) {
                 logger.info("MusicLibrary.conf should be in: " + new File("MusicLibrary.conf").getAbsolutePath());
