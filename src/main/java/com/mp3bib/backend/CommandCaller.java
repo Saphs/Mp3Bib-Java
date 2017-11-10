@@ -29,7 +29,8 @@ public class CommandCaller {
             new GetMusicList(),
             new Help(),
             new sys_Kill(),
-            new GetDetailedMetadata()
+            new GetDetailedMetadata(),
+            new GetAllMetadata()
     };
 
     /**

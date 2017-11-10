@@ -14,6 +14,8 @@ import com.mp3bib.model.DetailedMetaData;
 import org.bson.Document;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -120,6 +122,8 @@ public class Database {
     }
 
     private void connectToDB() {
+        Logger mongoLogger = Logger.getLogger( "org.mongodb" );
+        mongoLogger.setLevel(Level.SEVERE);
         this.client = new MongoClient(host , port);
         this.musicDB = this.client.getDatabase(databaseName);
         this.collection = musicDB.getCollection(collectionName);
