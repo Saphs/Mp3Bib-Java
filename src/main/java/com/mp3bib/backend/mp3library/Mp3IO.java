@@ -6,7 +6,9 @@ import com.mp3bib.backend.BackendprocessService;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Custom implemented adapter to beaglebuddy
@@ -47,8 +49,30 @@ public class Mp3IO {
         }
     }
 
+    private static List<File> readDirectoriesFromFile(File file) throws IOException {
+        List<File> list = new ArrayList<File>();
+        if (!file.exists() || !file.isFile()) throw new FileNotFoundException("listing File not found");
+        Scanner sc = new Scanner(file);
+        while (sc.hasNext()) {
+            String fPath = sc.nextLine();
+            File f = new File(fPath);
+            if (f.exists()) {
+                list.add(f);
+            } else {
+                BackendprocessService.getInstance().logger.warn("File/Directory not found: " + fPath);
+            }
+        }
+        return list;
+    }
 
-    private static void indiceFiles(File dir) throws FileNotFoundException {
+    public static void indirectIndiceDirectories(File file) throws IOException {
+        List<File> list = readDirectoriesFromFile(file);
+        for (File dir : list) {
+            indiceFiles(dir);
+        }
+    }
+
+    public static void indiceFiles(File dir) throws FileNotFoundException {
         if (!dir.exists()) {
             throw new FileNotFoundException();
         }
@@ -85,6 +109,12 @@ public class Mp3IO {
         if (!(f.exists() && f.isFile())) {
             throw new FileNotFoundException();
         }
-        //TODO: add File to Database
+        if (f.getName().toLowerCase().endsWith(".mp3")) {
+            try {
+                BackendprocessService.getInstance().database.addEntry(new MP3(f));
+            } catch (IOException e) {
+                BackendprocessService.getInstance().logger.error(f.toString() + " couldn't be read " + e.toString());
+            }
+        }
     }
 }

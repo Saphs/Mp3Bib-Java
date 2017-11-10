@@ -1,8 +1,13 @@
 package com.mp3bib.backend;
 
+import com.mp3bib.backend.mp3library.Database;
+import com.mp3bib.backend.mp3library.Mp3IO;
 import com.mp3bib.communication.BindableBackend;
 import com.mp3bib.logging.CustomLogger;
 import com.mp3bib.logging.Logger;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -19,7 +24,7 @@ import java.util.ArrayList;
 public class BackendprocessService extends BindableBackend implements Runnable {
 
     public Logger logger;
-
+    public Database database;
     private ArrayList<String> requestBuffer;
     private CommandCaller commandCaller;
     private ResponseDistributer responseDistributer;
@@ -58,6 +63,14 @@ public class BackendprocessService extends BindableBackend implements Runnable {
         logger.info("Backend:\t" + getClass().getTypeName() + " on " + Thread.currentThread().getName() + " starts.");
 
         synchronized (this) {
+            database = new Database();
+            try {
+                Mp3IO.indirectIndiceDirectories(new File("MusicLibrary.conf"));
+            } catch (IOException e) {
+                logger.info("MusicLibrary.conf should be in: " + new File("MusicLibrary.conf").getAbsolutePath());
+                logger.error("couldn't load MusicLibrary.conf" + e.toString());
+            }
+
             while (!closeRequest) {
                 waitForRequest();
                 if (!closeRequest) {

@@ -1,16 +1,25 @@
 package com.mp3bib.backend.mp3library;
 
 import com.beaglebuddy.mp3.MP3;
+import com.google.gson.Gson;
+import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
+import com.mp3bib.Configuration;
+import com.mp3bib.backend.BackendprocessService;
+import com.mp3bib.model.CommonMetaData;
 import com.mp3bib.model.DetailedMetaData;
 import org.bson.Document;
+
+import java.io.IOException;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class Database {
+
+    private final Gson gson = new Gson();
 
     private MongoClient client;
     private MongoDatabase musicDB;
@@ -22,6 +31,14 @@ public class Database {
     private String collectionName = "musicDB";
 
     public Database() {
+        try {
+            this.host = Configuration.getConfigAsString("HOST");
+            this.port = Configuration.getConfigAsInt("PORT");
+            this.databaseName = Configuration.getConfigAsString("DATABASE_NAME");
+            this.collectionName = Configuration.getConfigAsString("COLLECTION_NAME");
+        } catch (IOException e) {
+            BackendprocessService.getInstance().logger.error(e.toString());
+        }
         this.connectToDB();
     }
 
@@ -38,8 +55,10 @@ public class Database {
      * @param mp3 a MP3 Object for the entry
      * @throws NotConnectedException
      */
-    public void addEntry(MP3 mp3) throws NotConnectedException {
-        this.getCollection().insertOne(createDocumentFromMp3(mp3));
+    public int addEntry(MP3 mp3) throws NotConnectedException {
+        Document doc = createDocumentFromMp3(mp3);
+        this.getCollection().insertOne(doc);
+        return 0;//(int) doc.get("id");
     }
 
     /**
@@ -57,7 +76,7 @@ public class Database {
      * @return the DetailedMetaData
      */
     public DetailedMetaData getById(int id) throws NotConnectedException {
-        return DetailedMetaData.fromDocument(new DetailedMetaData(), getCollection().find(eq("id", id)).first());
+        return gson.fromJson(getCollection().find(eq("id", id)).first().toJson(), DetailedMetaData.class);
     }
 
     /**
@@ -67,6 +86,20 @@ public class Database {
      */
     public String getFilePathByID(int id) throws NotConnectedException {
         return (String) getCollection().find(eq("id", id)).first().get("path");
+    }
+
+    public CommonMetaData[] getAll() throws NotConnectedException {
+        CommonMetaData[] commonList = new CommonMetaData[(int) this.getCount()];
+        Block<Document> listBlock = new Block<Document>() {
+            private int i = 0;
+            @Override
+            public void apply(final Document document) {
+                commonList[i] = gson.fromJson(document.toJson(), CommonMetaData.class);
+                i++;
+            }
+        };
+        getCollection().find().forEach(listBlock);
+        return commonList;
     }
 
 
@@ -89,14 +122,20 @@ public class Database {
     }
 
     private int getLargestID() throws NotConnectedException {
-        return (int) getCollection().find().sort(Sorts.descending("id")).limit(1).first().get("id");
+        try {
+            int largestID = (int) getCollection().find().sort(Sorts.descending("id")).limit(1).first().get("id");
+            return largestID;
+        } catch (Exception e) {
+            BackendprocessService.getInstance().logger.error("couldnt find largest id" + e.toString());
+        }
+        return 1;
     }
 
     private Document createDocumentFromMp3(MP3 mp3) throws NotConnectedException {
         int id = getLargestID() + 1;
-        Document doc = new Document("path", mp3.getPath());
         DetailedMetaData metaData = new DetailedMetaData(id, mp3);
-        metaData.appendToDocument(doc);
+        Document doc = Document.parse(gson.toJson(metaData));
+        doc.append("path", mp3.getPath());
         return doc;
     }
 }

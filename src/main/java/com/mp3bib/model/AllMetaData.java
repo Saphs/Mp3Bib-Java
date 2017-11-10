@@ -47,41 +47,6 @@ public class AllMetaData extends DetailedMetaData {
                 mp3.getVersion());
     }
 
-    /**
-     * appends the data from this AllMetaData Object to a MongoDB Document
-     * @param doc the MongoDB Document to append to
-     */
-    public void appendToDocument(Document doc) {
-        super.appendToDocument(doc);
-        doc.append("audioSize", this.audioSize);
-        doc.append("lyrics", this.lyrics);
-        doc.append("publisher", this.publisher);
-        doc.append("mpegVersion", this.mpegVersion);
-        doc.append("channelMode", this.channelMode);
-        doc.append("layer", this.layer);
-        doc.append("tagVersion", this.tagVersion);
-    }
-
-    /**
-     * create a AllMetaData Object from a MongoDB Document
-     * @param allMeta the AllMetaData Object to write the data to
-     * @param doc the MongoDB Object
-     * @return the AllMetaData Object
-     */
-    public static AllMetaData fromDocument(AllMetaData allMeta, Document doc) {
-        DetailedMetaData.fromDocument(allMeta, doc);
-
-        allMeta.setAudioSize((int) doc.get("audioSize"));
-        allMeta.setLyrics((String) doc.get("lyrics"));
-        allMeta.setPublisher((String) doc.get("publisher"));
-        allMeta.setMpegVersion((MPEGVersion) doc.get("mpegVersion"));
-        allMeta.setChannelMode((ChannelMode) doc.get("channelMode"));
-        allMeta.setLayer((Layer) doc.get("layer"));
-        allMeta.setTagVersion((ID3TagVersion) doc.get("tagVersion"));
-
-        return allMeta;
-    }
-
 
     /**
      * gets audioSize

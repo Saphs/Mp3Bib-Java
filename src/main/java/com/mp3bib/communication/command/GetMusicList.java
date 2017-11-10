@@ -1,5 +1,6 @@
 package com.mp3bib.communication.command;
 
+import com.mp3bib.backend.mp3library.NotConnectedException;
 import com.mp3bib.model.CommonMetaData;
 
 /**
@@ -13,11 +14,14 @@ public class GetMusicList extends Command{
 
     @Override
     public String invoke(String json) {
-        CommonMetaData[] list = null;
-        //TODO: implement getMusicList in DB connector
-        // list = getMusicList();
-        String txt = gson.toJson(list);
-        return txt;
+        try {
+            CommonMetaData[] list = backend.database.getAll();
+            String txt = gson.toJson(list);
+            return txt;
+        } catch (NotConnectedException e) {
+            backend.logger.error(e.toString());
+            return "";
+        }
     }
 
     @Override
