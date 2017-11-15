@@ -131,7 +131,11 @@ public class Database {
 
     private int getLargestID() throws NotConnectedException {
         try {
-            int largestID = (int) getCollection().find().sort(Sorts.descending("internalDbID")).limit(1).first().get("internalDbID");
+            MongoCollection<Document> collection = getCollection();
+            if (collection.count() <= 0) {
+                return 0;
+            }
+            int largestID = (int) collection.find().sort(Sorts.descending("internalDbID")).limit(1).first().get("internalDbID");
             return largestID;
         } catch (Exception e) {
             BackendprocessService.getInstance().logger.error("couldnt find largest id " + e.toString());
