@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.mp3bib.backend.mp3library.Database;
 import com.mp3bib.backend.mp3library.Mp3IO;
 import com.mp3bib.communication.BindableBackend;
+import com.mp3bib.communication.command.sys_Kill;
 import com.mp3bib.logging.CustomLogger;
 import com.mp3bib.logging.Logger;
 
@@ -103,7 +104,7 @@ public class BackendprocessService extends BindableBackend implements Runnable {
 
     @Override
     public void killBackend() {
-        pushRequest("sys_Kill");
+        pushRequest(new sys_Kill().createSendable());
     }
     //------------------------------------------------------------------------------------------------------------------
 
