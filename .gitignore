@@ -5,4 +5,4 @@ gradle/
 Mp3Bib.iml
 build/
 *.bak
-MusicLibrary.conf
+MusicLibrary.*
