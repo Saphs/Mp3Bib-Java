@@ -89,7 +89,7 @@ public class Mp3IO {
         if (mp3.hasErrors()) {                                              // check for tag errors
             List<String> errors = mp3.getErrors();
             for(String error : errors) {
-                BackendprocessService.getInstance().logger.error(error);    // log tag errors
+                BackendprocessService.getInstance().logger.error(error + " " + mp3.getPath());    // log tag errors
             }
             mp3.save();
             return false;
@@ -111,7 +111,8 @@ public class Mp3IO {
         }
         if (f.getName().toLowerCase().endsWith(".mp3")) {
             try {
-                BackendprocessService.getInstance().database.addEntry(new MP3(f));
+                MP3 mp3 = getMP3Tags(f);
+                if(mp3 != null) BackendprocessService.getInstance().database.addEntry(mp3);
             } catch (IOException e) {
                 BackendprocessService.getInstance().logger.error(f.toString() + " couldn't be read " + e.toString());
             }

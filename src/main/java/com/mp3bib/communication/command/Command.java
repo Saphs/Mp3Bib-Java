@@ -16,8 +16,6 @@ import java.util.Scanner;
  */
 public abstract class Command {
 
-    //protected final Gson gson = new Gson();
-    //final BackendprocessService backend = BackendprocessService.getInstance();
     final String commandName = this.getClass().getSimpleName();
 
     public Command() {}
@@ -36,7 +34,7 @@ public abstract class Command {
     /**
      * used to separate args by spaces
      * used to parse from cmdline interface to arguments
-     * @param txt the full parameterstring
+     * @param txt the full parameter string
      * @return the arguments
      */
     protected static ArrayList<String> seperateArgs(String txt) {
@@ -58,7 +56,7 @@ public abstract class Command {
     public abstract String invoke(String json);
 
     /**
-     * 'createSendable' is meant to be implemented as a static method to provide
+     * 'createSendable' is meant to be implemented as a method to provide
      * an easy way to send a given command as a Json-String.
      * @return needs to provide a Json-String that can be send directly.
      */
