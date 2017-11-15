@@ -30,7 +30,8 @@ public class CommandCaller {
             new Help(),
             new sys_Kill(),
             new GetDetailedMetadata(),
-            new GetAllMetadata()
+            new GetAllMetadata(),
+            new GetPictureByType()
     };
 
     /**
