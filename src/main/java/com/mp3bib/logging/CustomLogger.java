@@ -106,7 +106,7 @@ public class CustomLogger implements Logger {
      */
     public void debug(String customText) {
         if (currentLogLevel >= LOGLEVEL_DEBUG) {
-            log(customText, COLOR_GREEN);
+            log(customText, COLOR_WHITE);
         }
     }
     /**
@@ -116,7 +116,7 @@ public class CustomLogger implements Logger {
      */
     public void info(String customText) {
         if (currentLogLevel >= LOGLEVEL_INFO) {
-            log(customText, COLOR_YELLOW);
+            log(customText, COLOR_WHITE);
         }
     }
     /**
@@ -126,7 +126,7 @@ public class CustomLogger implements Logger {
      */
     public void warn(String customText) {
         if (currentLogLevel >= LOGLEVEL_WARN) {
-            log(customText, COLOR_MAGENTA);
+            log(customText, COLOR_YELLOW);
         }
     }
     /**
