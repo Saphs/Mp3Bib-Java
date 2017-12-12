@@ -8,3 +8,6 @@ https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
 
 Main developers will be Daniel Liebler & Tizian Rettig
 
+requires Node
+requires audio-metadata - https://www.npmjs.com/package/audio-metadata
+
